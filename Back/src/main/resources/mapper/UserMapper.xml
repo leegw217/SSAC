@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssac.mappers.UserMapper">
+	<!-- 회원조회 -->
+	<select id="selectUser" parameterType="com.ssac.user.dto.User" resultType="com.ssac.user.dto.User">
+		 select *
+		 from user
+		 where id = #{id}
+	</select>
+
+	<!-- 회원등록 -->
+	<insert id="insertUser" parameterType="com.ssac.user.dto.User">
+		insert into user (id, pw, nickname)
+		values (#{id}, #{pw}, #{nickname})
+	</insert>	
+	
+	<!-- 회원수정 -->
+	<update id="updateUserInformation" parameterType="com.ssac.user.dto.User">
+		update user
+		   set nickname = #{nickname}, intro = #{intro}, profile = #{profile}
+		 where id = #{id}
+	</update>	
+	
+	<!-- 회원탈퇴 -->
+	<delete id="deleteUser" parameterType="com.ssac.user.dto.User">
+		delete from user where id=#{id}
+	</delete>
+	
+	<!-- 팔로잉 목록 -->
+	<select id="selectFollowing" parameterType="String" resultType="String">
+		select follow_id
+		from follow
+		where id = #{userid}
+	</select>
+	
+	<!-- 팔로워 목록 -->
+	<select id="selectFollower" parameterType="String" resultType="String">
+		select id
+		from follow
+		where follow_id = #{userid}
+	</select>
+	
+	<!-- 비밀번호 변경 -->
+	<update id="updateUserPassword" parameterType="HashMap">
+		update user
+		set pw = #{userpw}
+		where id = #{userid}
+	</update>
+	
+	<!-- 팔로잉 -->
+	<insert id="insertFollowing" parameterType="HashMap">
+		insert into follow values (#{userid}, #{follow_id})
+	</insert>
+	
+	<!-- 유저 검색 -->
+	<select id="searchUser" parameterType="String" resultType="com.ssac.user.dto.User">
+		select *
+		from user
+		where nickname like concat('%', #{search}, '%')
+	</select>
+	
+	<select id="selectAllUser" resultType="String">
+		select id from user;
+	</select>
+</mapper>
